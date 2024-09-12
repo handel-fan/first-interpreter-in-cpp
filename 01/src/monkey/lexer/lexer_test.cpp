@@ -6,17 +6,17 @@ using Literal = std::string;
 
 namespace lexer {
 
+std::string input2 = "let five = 5;"
+                     "let ten = 10;"
+                     "let add = fn(x, y) {"
+                     "x + y;"
+                     "};"
+                     "let result = add(five, ten);"
+                     "let result = add(five, ten);"
+    //
+    ;
 TEST(NextToken, BasicNextToken) {
   std::string input = "=+(){},;";
-  std::string input2 = "let five = 5;"
-                       "let ten = 10;"
-                       "let add = fn(x, y) {"
-                       "x + y;"
-                       "};"
-                       "let result = add(five, ten);"
-                       "let result = add(five, ten);"
-      //
-      ;
 
   std::vector<std::pair<ExpectedType, Literal>> tests = {
       //
@@ -36,7 +36,6 @@ TEST(NextToken, BasicNextToken) {
                token.second;
   }
 
-  EXPECT_EQ(true, true);
   //
 } // namespace lexer
 

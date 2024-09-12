@@ -1,7 +1,7 @@
+#include "types.h"
 #include <map>
 #include <string>
 
-using TokenType = std::string;
 namespace token {
 const TokenType ILLEGAL = "ILLEGAL";
 const TokenType END_OF_FILE = "EOF";
@@ -42,5 +42,4 @@ const std::map<std::string, TokenType> keywords = {
     {"fn", FUNCTION}, {"let", LET},   {"true", TRUE},     {"false", FALSE},
     {"if", IF},       {"else", ELSE}, {"return", RETURN},
 };
-
 } // namespace token

@@ -1,5 +1,5 @@
-#include "../token/constants.h"
 #include "include/gtest.h"
+#include "include/lexer.h"
 #include <vector>
 using ExpectedType = TokenType;
 using Literal = std::string;
@@ -26,14 +26,14 @@ TEST(NextToken, BasicNextToken) {
 
   lexer::Lexer lexerInstance{input};
   for (const auto &test_elem : tests) {
-    std::pair<ExpectedType, Literal> token = lexerInstance.NextToken();
-    EXPECT_EQ(token.first, test_elem.first)
+    auto token = lexerInstance.NextToken();
+    EXPECT_EQ(token.type, test_elem.first)
         << "\nWrong Token Expected Type. Expected " + test_elem.first + "got " +
-               token.first;
+               token.type;
 
-    EXPECT_EQ(token.second, test_elem.second)
+    EXPECT_EQ(token.literal, test_elem.second)
         << "\nWrong Token Literal. Expected " + test_elem.second + "got " +
-               token.second;
+               token.literal;
   }
 
   //

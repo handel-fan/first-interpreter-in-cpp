@@ -1,5 +1,5 @@
 // lexer.h
-#include "../../token/token.h"
+#include "../../token/include/token.h"
 #include <string>
 
 namespace lexer {

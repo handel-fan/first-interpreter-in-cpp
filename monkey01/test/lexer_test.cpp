@@ -36,9 +36,5 @@ TEST(NextToken, BasicNextToken) {
         << "\nWrong Token Literal. Expected " + test_elem.second + "got " +
                token.literal;
   }
-
-  //
-} // namespace lexer
-
-// sl.dkjfsldkfj
+}
 } // namespace lexer

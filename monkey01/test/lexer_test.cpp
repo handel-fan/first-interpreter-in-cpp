@@ -1,5 +1,6 @@
 #include "../include/lexer/lexer.h"
-#include "../lib/gtest.h"
+#include "../lib/gtest/include/gtest.h"
+#include <iostream>
 #include <vector>
 using ExpectedType = TokenType;
 using Literal = std::string;
@@ -20,16 +21,16 @@ TEST(NextToken, BasicNextToken) {
 
   std::vector<std::pair<ExpectedType, Literal>> tests = {
       //
-      {token::ASSIGN, "="},     {token::PLUS, "+"},  {token::LPAREN, "["},
-      {token::RPAREN, "]"},     {token::COMMA, ","}, {token::SEMICOLON, ";"},
-      {token::END_OF_FILE, ";"}};
+      {token::ASSIGN, "="}, {token::PLUS, "+"},     {token::LPAREN, "("},
+      {token::RPAREN, ")"}, {token::LBRACE, "{"},   {token::RBRACE, "}"},
+      {token::COMMA, ","},  {token::SEMICOLON, ";"}};
 
   lexer::Lexer lexerInstance{input};
   for (const auto &test_elem : tests) {
     auto token = lexerInstance.NextToken();
-    EXPECT_EQ(token.type, test_elem.first)
-        << "\nWrong Token Expected Type. Expected " + test_elem.first + "got " +
-               token.type;
+    EXPECT_EQ(token.type, test_elem.first) << "\nWrong Token Type. Expected " +
+                                                  test_elem.first + "got " +
+                                                  token.type;
 
     EXPECT_EQ(token.literal, test_elem.second)
         << "\nWrong Token Literal. Expected " + test_elem.second + "got " +
@@ -41,4 +42,3 @@ TEST(NextToken, BasicNextToken) {
 
 // sl.dkjfsldkfj
 } // namespace lexer
-  // Teddy is a fucking cunt.

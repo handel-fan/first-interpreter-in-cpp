@@ -1,4 +1,5 @@
 #include "../include/lexer/lexer.h"
+#include <iostream>
 #include <string>
 
 namespace lexer {
@@ -14,6 +15,9 @@ void Lexer::readChar() {
   } else {
     cursor_char = input.at(read_position);
   }
+  auto prstr = "handel inside readchar called: " +
+               std::string(1, static_cast<char>(cursor_char));
+  std::cout << prstr << std::endl;
   position = read_position;
   read_position++;
 }
@@ -24,22 +28,31 @@ token::Token Lexer::NextToken() {
   switch (curr_char) {
   case '=':
     tok = token::Token{token::ASSIGN, std::string(1, curr_char)};
+    break;
   case ';':
     tok = token::Token{token::SEMICOLON, std::string(1, curr_char)};
+    break;
   case '(':
     tok = token::Token{token::LPAREN, std::string(1, curr_char)};
+    break;
   case ')':
     tok = token::Token{token::RPAREN, std::string(1, curr_char)};
+    break;
   case ',':
     tok = token::Token{token::COMMA, std::string(1, curr_char)};
+    break;
   case '+':
     tok = token::Token{token::PLUS, std::string(1, curr_char)};
+    break;
   case '{':
     tok = token::Token{token::LBRACE, std::string(1, curr_char)};
+    break;
   case '}':
     tok = token::Token{token::RBRACE, std::string(1, curr_char)};
+    break;
   case 0:
     tok = token::Token{token::END_OF_FILE, ""};
+    break;
   }
   this->readChar();
   return tok;

@@ -4,7 +4,7 @@
 
 namespace token {
 const TokenType ILLEGAL = "ILLEGAL";
-const TokenType END_OF_FILE = "EOF";
+const TokenType END_OF_FILE = "";
 
 // Identifiers + literals
 const TokenType IDENT = "IDENT"; // add, foobar, x, y, ...

@@ -3,26 +3,62 @@
 #include <string>
 
 namespace lexer {
-Lexer::Lexer(std::string str_input) : input(str_input) {
-  //
-  //
-  this->readChar();
+
+bool IsLetter(unsigned char byte) {
+  return byte == 95                      // underscore
+         || (byte >= 65 && byte <= 90)   // lowercase
+         || (byte >= 97 && byte <= 122); // uppercase
 }
 
-void Lexer::readChar() {
+bool IsDigit(unsigned char byte) {
+  // 48 is 1 in ascii, 57 is 9
+  return byte >= 48 && byte <= 57;
+}
+
+Lexer::Lexer(std::string str_input) : input(str_input) {
+  //
+  this->ReadChar();
+}
+
+void Lexer::SkipWhitespace() {
+  while (cursor_char == 9     // horizontal tab
+         || cursor_char == 32 // space
+         || cursor_char == 10 // newline
+         || cursor_char == 13 // carriage return
+  ) {
+    this->ReadChar();
+  }
+}
+
+void Lexer::ReadChar() {
   if (read_position >= input.length()) {
     cursor_char = 0;
   } else {
     cursor_char = input.at(read_position);
   }
-  auto prstr = "handel inside readchar called: " +
-               std::string(1, static_cast<char>(cursor_char));
-  std::cout << prstr << std::endl;
   position = read_position;
   read_position++;
 }
 
+std::string Lexer::ReadIdentifier() {
+  int ident_start_index = position;
+  while (IsLetter(cursor_char)) {
+    this->ReadChar();
+  }
+  return input.substr(ident_start_index, position - ident_start_index);
+}
+
+std::string Lexer::ReadDigit() {
+  //
+  int digit_start_index = position;
+  while (IsDigit(cursor_char)) {
+    this->ReadChar();
+  }
+  return input.substr(digit_start_index, position - digit_start_index);
+}
+
 token::Token Lexer::NextToken() {
+  this->SkipWhitespace();
   token::Token tok;
   auto curr_char = this->cursor_char;
   switch (curr_char) {
@@ -53,8 +89,18 @@ token::Token Lexer::NextToken() {
   case 0:
     tok = token::Token{token::END_OF_FILE, ""};
     break;
+  default:
+    if (IsLetter(curr_char)) {
+      auto ident_literal = ReadIdentifier();
+      return token::Token{token::LookupIdent(ident_literal), ident_literal};
+    } else if (IsDigit(curr_char)) {
+      auto digit_literal = ReadDigit();
+      return token::Token{token::INT, digit_literal};
+    } else {
+      tok = token::Token{token::ILLEGAL, "ILLEGAL CHARACTER"};
+    }
   }
-  this->readChar();
+  this->ReadChar();
   return tok;
 }
 

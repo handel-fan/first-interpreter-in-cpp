@@ -10,4 +10,6 @@ struct Token {
   std::string literal;
 };
 
+TokenType LookupIdent(std::string ident);
+
 } // namespace token

@@ -1,4 +1,5 @@
 #include "../include/token/constants.h"
+#include <iostream>
 #include <map>
 #include <string>
 

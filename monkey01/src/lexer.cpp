@@ -40,6 +40,13 @@ void Lexer::ReadChar() {
   read_position++;
 }
 
+unsigned char Lexer::PeekChar() {
+  if (read_position >= input.length()) {
+    return 0;
+  } else
+    return input.at(read_position);
+}
+
 std::string Lexer::ReadIdentifier() {
   int ident_start_index = position;
   while (IsLetter(cursor_char)) {
@@ -61,8 +68,17 @@ token::Token Lexer::NextToken() {
   this->SkipWhitespace();
   token::Token tok;
   auto curr_char = this->cursor_char;
+  unsigned char next_char = PeekChar();
   switch (curr_char) {
   case '=':
+    if (next_char == '=') {
+      char first_char = cursor_char;
+      ReadChar();
+      tok = token::Token{token::EQ,
+                         std::string{first_char} +
+                             std::string{static_cast<char>(cursor_char)}};
+      break;
+    }
     tok = token::Token{token::ASSIGN, std::string(1, curr_char)};
     break;
   case ';':
@@ -85,6 +101,32 @@ token::Token Lexer::NextToken() {
     break;
   case '}':
     tok = token::Token{token::RBRACE, std::string(1, curr_char)};
+    break;
+  case '!':
+    if (next_char == '=') {
+      char first_char = cursor_char;
+      ReadChar();
+      tok = token::Token{token::NOT_EQ,
+                         std::string{first_char} +
+                             std::string{static_cast<char>(cursor_char)}};
+      break;
+    }
+    tok = token::Token{token::BANG, std::string(1, curr_char)};
+    break;
+  case '-':
+    tok = token::Token{token::MINUS, std::string(1, curr_char)};
+    break;
+  case '/':
+    tok = token::Token{token::SLASH, std::string(1, curr_char)};
+    break;
+  case '*':
+    tok = token::Token{token::ASTERISK, std::string(1, curr_char)};
+    break;
+  case '<':
+    tok = token::Token{token::LT, std::string(1, curr_char)};
+    break;
+  case '>':
+    tok = token::Token{token::GT, std::string(1, curr_char)};
     break;
   case 0:
     tok = token::Token{token::END_OF_FILE, ""};

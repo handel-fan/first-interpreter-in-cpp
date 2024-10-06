@@ -14,5 +14,6 @@ struct Lexer {
   token::Token NextToken();
   std::string ReadIdentifier();
   std::string ReadDigit();
+  unsigned char PeekChar();
 };
 } // namespace lexer

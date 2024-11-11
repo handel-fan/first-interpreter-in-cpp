@@ -4,7 +4,7 @@
 #define PARSER_H
 
 #include "../ast.h"
-#include "../lexer.h"
+#include "../lexer/lexer.h"
 #include "../token/token.h"
 
 namespace parser {

@@ -3,7 +3,7 @@
 #define LEXER_H
 
 // lexer.h
-#include "token/token.h"
+#include "../token/token.h"
 #include <string>
 
 namespace lexer {

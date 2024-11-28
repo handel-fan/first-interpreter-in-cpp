@@ -1,3 +1,6 @@
+#ifndef TOKEN_H
+#define TOKEN_H
+
 // token.h
 
 #include "constants.h"
@@ -13,3 +16,4 @@ struct Token {
 TokenType LookupIdent(std::string ident);
 
 } // namespace token
+#endif // TOKEN_H

@@ -1,3 +1,5 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 #include "types.h"
 #include <map>
 #include <string>
@@ -43,3 +45,4 @@ const std::map<std::string, TokenType> keywords = {
     {"if", IF},       {"else", ELSE}, {"return", RETURN},
 };
 } // namespace token
+#endif // CONSTANTS_H

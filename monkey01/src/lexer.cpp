@@ -1,5 +1,4 @@
 #include "../include/lexer/lexer.h"
-#include <iostream>
 #include <string>
 
 namespace lexer {
@@ -56,12 +55,17 @@ std::string Lexer::ReadIdentifier() {
 }
 
 std::string Lexer::ReadDigit() {
-  //
   int digit_start_index = position;
   while (IsDigit(cursor_char)) {
     this->ReadChar();
   }
   return input.substr(digit_start_index, position - digit_start_index);
+}
+
+token::Token Lexer::PeekToken() {
+  if (position >= input.length()) {
+    return token::Token{token::END_OF_FILE, ""};
+  }
 }
 
 token::Token Lexer::NextToken() {
@@ -133,7 +137,7 @@ token::Token Lexer::NextToken() {
     break;
   default:
     if (IsLetter(curr_char)) {
-      auto ident_literal = ReadIdentifier();
+      std::string ident_literal = ReadIdentifier();
       return token::Token{token::LookupIdent(ident_literal), ident_literal};
     } else if (IsDigit(curr_char)) {
       auto digit_literal = ReadDigit();

@@ -1,4 +1,8 @@
 // lexer.h
+#ifndef LEXER_H
+#define LEXER_H
+
+// lexer.h
 #include "../token/token.h"
 #include <string>
 
@@ -15,5 +19,8 @@ struct Lexer {
   std::string ReadIdentifier();
   std::string ReadDigit();
   unsigned char PeekChar();
+  token::Token PeekToken();
 };
 } // namespace lexer
+
+#endif // LEXER_H

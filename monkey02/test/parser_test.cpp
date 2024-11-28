@@ -7,9 +7,9 @@ using ExpectedIdentifier = std::string;
 
 namespace parser {
 
-struct TestCase {
+struct StatementTestCase {
   std::string ExpectedIdentifier;
-  TestCase(const std::string &str) : ExpectedIdentifier(str){};
+  StatementTestCase(const std::string &str) : ExpectedIdentifier(str) {};
 };
 
 //
@@ -26,16 +26,42 @@ TEST(Parser, BasicParser) {
   }
   if (program.statements.size() != 3) {
     FAIL() << "ParseProgram did not have 3 statements, got"
-           << program.statements.size();
+           << program.statements.size() << "statements";
   }
+
   // std::vector<std::map<ExpectedIdentifier, std::string>> test_cases = { {} }
-  parser::TestCase xstatement, ystatement, foobarstatement = TestCase{"x"},
-                                           TestCase("x"), TestCase("x");
-  std::vector<parser::TestCase> test_cases = {
-      TestCase("x"),
-      TestCase("y"),
-      TestCase("foobar"),
+  // parser::StatementTestCase xstatement{"x"}, ystatement{"y"},
+  //   foobarstatement{"foobar"};
+
+  std::vector<parser::StatementTestCase> test_cases = {
+      StatementTestCase{"x"},
+      StatementTestCase{"y"},
+      StatementTestCase{"foobar"},
   };
+}
+for (int i = 0; i < test_cases.size(); i++) {
+  if (!TestLetStatement(&program.statements[0], test_cases[0])) {
+    FAIL() << "";
+  }
+}
+}
+
+bool TestLetStatement(ast::Statement *s, std::string name) {
+  ast::LetStatement *letStatement = dynamic_cast<ast::LetStatement *>(s);
+  if (!letStatement) {
+    return false;
+  }
+  if (letStatement->TokenLiteral() != "let") {
+    return false;
+  }
+  if (letStatement->name->value != name) {
+    return false;
+  }
+  if (letStatement->name->TokenLiteral() != name) {
+    return false;
+  }
+
+  return true;
 }
 
 } // namespace parser

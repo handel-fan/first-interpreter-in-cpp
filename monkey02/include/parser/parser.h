@@ -10,25 +10,15 @@
 namespace parser {
 struct Parser {
 public:
-  Parser(lexer::Lexer lexer) : l(lexer) {
-    NextToken();
-    NextToken();
-  }
+  Parser(lexer::Lexer lexer);
   lexer::Lexer l;
 
   token::Token currToken;
   token::Token peekToken;
 
-  void NextToken() {
-    currToken = peekToken;
-    peekToken = l.NextToken();
-  }
+  void NextToken();
 
-  ast::Program ParseProgram() {
-    return ast::Program();
-    //
-  }
+  ast::Program ParseProgram();
 };
 } // namespace parser
-
 #endif // PARSER_H

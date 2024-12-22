@@ -8,17 +8,21 @@
 #include "../token/token.h"
 
 namespace parser {
-struct Parser {
+class Parser {
 public:
   Parser(lexer::Lexer lexer);
-  lexer::Lexer l;
+
+  void NextToken();
+  ast::Program ParseProgram();
+  ast::Statement *ParseStatement();
+  ast::Statement *ParseLetStatement();
+  bool ExpectPeek(token::Token expectedToken);
+
+private:
+  lexer::Lexer lexer;
 
   token::Token currToken;
   token::Token peekToken;
-
-  void NextToken();
-
-  ast::Program ParseProgram();
 };
 } // namespace parser
 #endif // PARSER_H

@@ -14,10 +14,7 @@ bool IsDigit(unsigned char byte) {
   return byte >= 48 && byte <= 57;
 }
 
-Lexer::Lexer(std::string str_input) : input(str_input) {
-  //
-  this->ReadChar();
-}
+Lexer::Lexer(std::string str_input) : input(str_input) { this->ReadChar(); }
 
 void Lexer::SkipWhitespace() {
   while (cursor_char == 9     // horizontal tab
@@ -60,12 +57,6 @@ std::string Lexer::ReadDigit() {
     this->ReadChar();
   }
   return input.substr(digit_start_index, position - digit_start_index);
-}
-
-token::Token Lexer::PeekToken() {
-  if (position >= input.length()) {
-    return token::Token{token::END_OF_FILE, ""};
-  }
 }
 
 token::Token Lexer::NextToken() {

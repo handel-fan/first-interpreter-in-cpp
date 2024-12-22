@@ -45,9 +45,10 @@ TEST(Parser, BasicParser) {
   if (program.statements.size() == 0) {
     FAIL() << "ParseProgram had no statements";
   }
+
   if (program.statements.size() != 3) {
-    FAIL() << "ParseProgram did not have 3 statements, got"
-           << program.statements.size() << " statements";
+    FAIL() << "Expected 3 statements, got" << program.statements.size()
+           << " statements";
   }
 
   std::vector<parser::StatementTestCase> test_cases = {

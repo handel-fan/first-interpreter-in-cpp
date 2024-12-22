@@ -6,6 +6,7 @@
 #include "../include/parser/parse_exception.h"
 #include "../include/token/constants.h"
 #include "../include/token/token.h"
+#include <format>
 
 namespace parser {
 Parser::Parser(lexer::Lexer lexer) : lexer(lexer) {
@@ -51,7 +52,7 @@ bool Parser::ExpectPeek(token::Token t) {
     NextToken();
     return true;
   } else {
-    throw new ParseException("")
+    throw new ParseException(std::format("Expected token type: {}", t.type));
   }
 }
 

@@ -1,0 +1,2 @@
+1. Get clangd to version 20.x somehow
+2. Finish parser.cpp - we were doing some peek token and exception stuff.

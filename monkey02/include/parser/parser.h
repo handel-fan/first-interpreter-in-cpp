@@ -6,6 +6,7 @@
 #include "../ast.h"
 #include "../lexer/lexer.h"
 #include "../token/token.h"
+#include <optional>
 
 namespace parser {
 class Parser {
@@ -16,7 +17,8 @@ public:
   ast::Program ParseProgram();
   ast::Statement *ParseStatement();
   ast::Statement *ParseLetStatement();
-  bool ExpectPeek(token::Token expectedToken);
+  bool ExpectPeek(TokenType expectedToken);
+  std::vector<std::exception> errors;
 
 private:
   lexer::Lexer lexer;

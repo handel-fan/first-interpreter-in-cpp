@@ -6,14 +6,14 @@
 #include <exception>
 #include <string>
 
-class ParseException : public std::exception {
+class ParsingFailureException : public std::exception {
   //
 private:
   std::string message;
 
 public:
-  ParseException(const std::string &msg) : message(msg) {}
+  ParsingFailureException(const std::string &msg) : message(msg) {}
 
-  virtual const char *what() const noexcept override { return message.c_str(); }
+  const char *what() const noexcept override { return message.c_str(); }
 };
 #endif

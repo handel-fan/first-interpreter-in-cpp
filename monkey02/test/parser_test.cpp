@@ -39,8 +39,7 @@ TEST(Parser, BasicParser) {
                       "let y = 10;\n"
                       "let foobar = 838383;\n";
 
-  lexer::Lexer l = lexer::Lexer(input);
-  parser::Parser p = parser::Parser(l);
+  parser::Parser p = parser::Parser(lexer::Lexer(input));
   ast::Program program = p.ParseProgram();
   if (program.statements.size() == 0) {
     FAIL() << "ParseProgram had no statements";

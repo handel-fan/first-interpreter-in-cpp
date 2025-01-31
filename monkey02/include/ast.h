@@ -10,16 +10,20 @@
 
 namespace ast {
 struct Node {
-  virtual std::string TokenLiteral() = 0;
+  virtual std::string TokenLiteral() const = 0;
 };
 
-struct Statement : Node {};
+struct Statement : Node {
+  std::vector<token::Token> lvalue_list;
+
+  std::string TokenLiteral() const override { return "let"; }
+};
 
 struct Expression : Node {};
 
 struct Program : ast::Node {
   std::vector<ast::Statement> statements;
-  std::string TokenLiteral() {
+  std::string TokenLiteral() const override {
     if (statements.size() > 0) {
       return this->statements[0].TokenLiteral();
     } else {
@@ -32,15 +36,17 @@ struct Identifier : Expression {
   token::Token token;
   std::string value;
 
-  std::string TokenLiteral() override { return token.literal; }
+  std::string TokenLiteral() const override { return token.literal; }
 };
 
 struct LetStatement : Statement {
+  LetStatement() {};
+  LetStatement(token::Token t) : token(t) {};
   token::Token token;
   Identifier *name;
   Expression *value;
 
-  std::string TokenLiteral() override { return token.literal; }
+  std::string TokenLiteral() const override { return token.literal; }
 };
 
 } // namespace ast

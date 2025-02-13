@@ -16,6 +16,7 @@ struct Node {
 struct Statement : Node {
   std::vector<token::Token> lvalue_list;
 
+  // FIXME: This should not return let
   std::string TokenLiteral() const override { return "let"; }
 };
 
@@ -36,6 +37,9 @@ struct Identifier : Expression {
   token::Token token;
   std::string value;
 
+  Identifier() : token(), value() {};
+  Identifier(token::Token t, std::string v) : token(t), value(v) {};
+
   std::string TokenLiteral() const override { return token.literal; }
 };
 
@@ -43,7 +47,7 @@ struct LetStatement : Statement {
   LetStatement() {};
   LetStatement(token::Token t) : token(t) {};
   token::Token token;
-  Identifier *name;
+  Identifier name;
   Expression *value;
 
   std::string TokenLiteral() const override { return token.literal; }

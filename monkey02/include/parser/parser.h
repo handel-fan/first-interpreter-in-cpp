@@ -6,6 +6,7 @@
 #include "../ast.h"
 #include "../lexer/lexer.h"
 #include "../token/token.h"
+#include <memory>
 #include <optional>
 
 namespace parser {
@@ -15,8 +16,8 @@ public:
 
   void NextToken();
   ast::Program ParseProgram();
-  ast::Statement *ParseStatement();
-  ast::Statement *ParseLetStatement();
+  std::unique_ptr<ast::Statement> ParseStatement();
+  std::optional<std::unique_ptr<ast::LetStatement>> ParseLetStatement();
   bool ExpectPeek(TokenType expectedToken);
   std::vector<std::exception> errors;
 

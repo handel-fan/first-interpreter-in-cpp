@@ -1,5 +1,4 @@
 // parser.h
-
 #include "../include/parser/parser.h"
 #include "../include/ast.h"
 #include "../include/lexer/lexer.h"
@@ -7,6 +6,7 @@
 #include "../include/token/constants.h"
 #include "../include/token/token.h"
 #include <format>
+#include <memory>
 
 namespace parser {
 Parser::Parser(lexer::Lexer lexer) : lexer(lexer) {
@@ -34,8 +34,10 @@ ast::Program Parser::ParseProgram() {
   return ast::Program();
 }
 
-ast::Statement *Parser::ParseStatement() {
-  if (currToken.type == token::LET)
+std::unique_ptr<ast::Statement> Parser::ParseStatement() {
+  if (ExpectPeek(token::LET))
+    // TODO: We have to "move" the letstatement as a statement. Idk what that
+    // means yet
     return ParseLetStatement();
   else
     notimplementedpleaseignore();
@@ -48,14 +50,24 @@ ast::Statement *Parser::ParseStatement() {
 // ast::Statement Furthermore, a pointer can point to different memory addresses
 // in its lifetime. A reference can only point to 1 lvalue, and it must be
 // initialized.
-ast::Statement *Parser::ParseLetStatement() {
-  ast::Statement *statement = new ast::LetStatement{this->peekToken};
+std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
+  std::unique_ptr<ast::LetStatement> statement =
+      std::make_unique<ast::LetStatement>();
 
-  if (!ExpectPeek(token::LET)) {
+  if (!ExpectPeek(token::IDENT)) {
     return std::nullopt;
   }
 
-  return statement;
+  statement->name = ast::Identifier{currToken, currToken.literal};
+
+  if (!ExpectPeek(token::ASSIGN)) {
+    return std::nullopt;
+  }
+
+  this->NextToken();
+  statement->value = ast::Expression{};
+
+  return std::make_unique<ast::LetStatement>();
 }
 
 bool Parser::ExpectPeek(TokenType t) {

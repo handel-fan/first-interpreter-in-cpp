@@ -4,7 +4,6 @@
 #define AST_H
 
 #include "../include/token/token.h"
-#include "token/constants.h"
 #include <string>
 #include <vector>
 

@@ -69,62 +69,62 @@ token::Token Lexer::NextToken() {
     if (next_char == '=') {
       char first_char = cursor_char;
       ReadChar();
-      tok = token::Token{token::EQ,
+      tok = token::Token{TokenType::EQ,
                          std::string{first_char} +
                              std::string{static_cast<char>(cursor_char)}};
       break;
     }
-    tok = token::Token{token::ASSIGN, std::string(1, curr_char)};
+    tok = token::Token{TokenType::ASSIGN, std::string(1, curr_char)};
     break;
   case ';':
-    tok = token::Token{token::SEMICOLON, std::string(1, curr_char)};
+    tok = token::Token{TokenType::SEMICOLON, std::string(1, curr_char)};
     break;
   case '(':
-    tok = token::Token{token::LPAREN, std::string(1, curr_char)};
+    tok = token::Token{TokenType::LPAREN, std::string(1, curr_char)};
     break;
   case ')':
-    tok = token::Token{token::RPAREN, std::string(1, curr_char)};
+    tok = token::Token{TokenType::RPAREN, std::string(1, curr_char)};
     break;
   case ',':
-    tok = token::Token{token::COMMA, std::string(1, curr_char)};
+    tok = token::Token{TokenType::COMMA, std::string(1, curr_char)};
     break;
   case '+':
-    tok = token::Token{token::PLUS, std::string(1, curr_char)};
+    tok = token::Token{TokenType::PLUS, std::string(1, curr_char)};
     break;
   case '{':
-    tok = token::Token{token::LBRACE, std::string(1, curr_char)};
+    tok = token::Token{TokenType::LBRACE, std::string(1, curr_char)};
     break;
   case '}':
-    tok = token::Token{token::RBRACE, std::string(1, curr_char)};
+    tok = token::Token{TokenType::RBRACE, std::string(1, curr_char)};
     break;
   case '!':
     if (next_char == '=') {
       char first_char = cursor_char;
       ReadChar();
-      tok = token::Token{token::NOT_EQ,
+      tok = token::Token{TokenType::NOT_EQ,
                          std::string{first_char} +
                              std::string{static_cast<char>(cursor_char)}};
       break;
     }
-    tok = token::Token{token::BANG, std::string(1, curr_char)};
+    tok = token::Token{TokenType::BANG, std::string(1, curr_char)};
     break;
   case '-':
-    tok = token::Token{token::MINUS, std::string(1, curr_char)};
+    tok = token::Token{TokenType::MINUS, std::string(1, curr_char)};
     break;
   case '/':
-    tok = token::Token{token::SLASH, std::string(1, curr_char)};
+    tok = token::Token{TokenType::SLASH, std::string(1, curr_char)};
     break;
   case '*':
-    tok = token::Token{token::ASTERISK, std::string(1, curr_char)};
+    tok = token::Token{TokenType::ASTERISK, std::string(1, curr_char)};
     break;
   case '<':
-    tok = token::Token{token::LT, std::string(1, curr_char)};
+    tok = token::Token{TokenType::LT, std::string(1, curr_char)};
     break;
   case '>':
-    tok = token::Token{token::GT, std::string(1, curr_char)};
+    tok = token::Token{TokenType::GT, std::string(1, curr_char)};
     break;
   case 0:
-    tok = token::Token{token::END_OF_FILE, ""};
+    tok = token::Token{TokenType::END_OF_FILE, ""};
     break;
   default:
     if (IsLetter(curr_char)) {
@@ -132,9 +132,9 @@ token::Token Lexer::NextToken() {
       return token::Token{token::LookupIdent(ident_literal), ident_literal};
     } else if (IsDigit(curr_char)) {
       auto digit_literal = ReadDigit();
-      return token::Token{token::INT, digit_literal};
+      return token::Token{TokenType::INT, digit_literal};
     } else {
-      tok = token::Token{token::ILLEGAL, "ILLEGAL CHARACTER"};
+      tok = token::Token{TokenType::ILLEGAL, "ILLEGAL CHARACTER"};
     }
   }
   this->ReadChar();

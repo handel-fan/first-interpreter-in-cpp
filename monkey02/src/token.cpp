@@ -1,19 +1,14 @@
-#include "../include/token/constants.h"
-#include <map>
+// #include "../include/token/constants.h"
+#include "../include/token/token.h"
 #include <string>
 
 namespace token {
-
-struct Token {
-  TokenType type;
-  std::string literal;
-};
 
 TokenType LookupIdent(std::string ident) {
   if (keywords.find(ident) != keywords.end()) {
     return keywords.at(ident);
   }
-  return IDENT;
+  return TokenType::IDENT;
 }
 
 } // namespace token

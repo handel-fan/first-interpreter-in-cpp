@@ -4,7 +4,6 @@
 #define AST_H
 
 #include "../include/token/token.h"
-#include "token/constants.h"
 #include <string>
 #include <vector>
 
@@ -17,6 +16,8 @@ struct Statement : Node {
   std::vector<token::Token> lvalue_list;
 
   // FIXME: This should not return let
+  // Wtf should it return then, past Jegan
+  // Idk cut him some slack
   std::string TokenLiteral() const override { return "let"; }
 };
 

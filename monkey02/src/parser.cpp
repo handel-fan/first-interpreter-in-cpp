@@ -3,7 +3,6 @@
 #include "../include/ast.h"
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parse_exception.h"
-#include "../include/token/constants.h"
 #include "../include/token/token.h"
 #include <format>
 #include <memory>
@@ -26,7 +25,7 @@ ast::Program Parser::ParseProgram() {
   ast::Program program{};
   program.statements = std::vector<ast::Statement>();
 
-  while (currToken.type != token::END_OF_FILE) {
+  while (currToken.type != TokenType::END_OF_FILE) {
     auto stmt = ParseStatement();
     NextToken();
   }
@@ -35,14 +34,29 @@ ast::Program Parser::ParseProgram() {
 }
 
 std::unique_ptr<ast::Statement> Parser::ParseStatement() {
-  if (ExpectPeek(token::LET))
+
+  switch (currToken.type) {
+  case TokenType::LET:
+    auto stmt = ParseLetStatement();
+    if (stmt) {
+      return std::move(*stmt);
+    }
+  case TokenType::RETURN:
+    return ParseReturnStatement();
+  default:
+    return parseExpressionStatement();
+  }
+  if (ExpectPeek(TokenType::LET))
     // TODO: We have to "move" the letstatement as a statement. Idk what that
     // means yet
-    return ParseLetStatement();
-  else
-    notimplementedpleaseignore();
-  // else if (currToken.type == token::RETURN) return ParseReturnStatement();
-  // else return parseExpressionStatement();
+    if (auto letStatement = ParseLetStatement()) {
+      return std::move(*letStatement);
+    }
+
+    else
+      notimplementedpleaseignore();
+  // else if (currToken.type == TokenType::RETURN) return
+  // ParseReturnStatement(); else return parseExpressionStatement();
 }
 
 // In C++, you can declare a reference or pointer to an abstract class
@@ -54,20 +68,22 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
   std::unique_ptr<ast::LetStatement> statement =
       std::make_unique<ast::LetStatement>();
 
-  if (!ExpectPeek(token::IDENT)) {
-    return std::nullopt;
-  }
-
-  statement->name = ast::Identifier{currToken, currToken.literal};
-
-  if (!ExpectPeek(token::ASSIGN)) {
+  if (!ExpectPeek(TokenType::IDENT)) {
     return std::nullopt;
   }
 
   this->NextToken();
-  statement->value = ast::Expression{};
 
-  return std::make_unique<ast::LetStatement>();
+  statement->name = ast::Identifier{currToken, currToken.literal};
+
+  if (!ExpectPeek(TokenType::ASSIGN)) {
+    return std::nullopt;
+  }
+
+  this->NextToken();
+  statement->value = this->ParseExpression();
+
+  return statement;
 }
 
 bool Parser::ExpectPeek(TokenType t) {

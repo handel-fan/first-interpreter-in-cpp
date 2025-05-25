@@ -15,9 +15,6 @@ struct Node {
 struct Statement : Node {
   std::vector<token::Token> lvalue_list;
 
-  // FIXME: This should not return let
-  // Wtf should it return then, past Jegan
-  // Idk cut him some slack
   std::string TokenLiteral() const override { return "let"; }
 };
 

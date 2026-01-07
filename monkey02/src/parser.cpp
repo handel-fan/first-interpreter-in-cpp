@@ -4,8 +4,6 @@
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parse_exception.h"
 #include "../include/token/token.h"
-#include <format>
-#include <memory>
 
 namespace parser {
 Parser::Parser(lexer::Lexer lexer) : lexer(lexer) {
@@ -36,15 +34,27 @@ ast::Program Parser::ParseProgram() {
 std::unique_ptr<ast::Statement> Parser::ParseStatement() {
 
   switch (currToken.type) {
-  case TokenType::LET:
+  case TokenType::LET: {
     auto stmt = ParseLetStatement();
     if (stmt) {
       return std::move(*stmt);
+    } else {
+      throw ParsingFailureException("Failed to parse let statement");
     }
-  case TokenType::RETURN:
-    return ParseReturnStatement();
-  default:
-    return parseExpressionStatement();
+  }
+  case TokenType::RETURN: {
+    auto ret_stmt = ParseReturnStatement();
+    if (ret_stmt) {
+      return std::move(*ret_stmt);
+    } else {
+      throw ParsingFailureException("Failed to parse return statement");
+    }
+  }
+    // Will eventually add stuff like expressions to this switch statement
+  default: {
+    throw ParsingFailureException(
+        "Failed parsing, couldn't find out what statement type was.");
+  }
   }
   if (ExpectPeek(TokenType::LET))
     // TODO: We have to "move" the letstatement as a statement. Idk what that
@@ -61,9 +71,9 @@ std::unique_ptr<ast::Statement> Parser::ParseStatement() {
 
 // In C++, you can declare a reference or pointer to an abstract class
 // (ast::Statement) You cannot instantiate, declare, or initialize an
-// ast::Statement Furthermore, a pointer can point to different memory addresses
-// in its lifetime. A reference can only point to 1 lvalue, and it must be
-// initialized.
+// ast::Statement Furthermore, a pointer can point to different memory
+// addresses in its lifetime. A reference can only point to 1 lvalue, and it
+// must be initialized.
 std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
   std::unique_ptr<ast::LetStatement> statement =
       std::make_unique<ast::LetStatement>();
@@ -85,6 +95,9 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
 
   return statement;
 }
+
+std::optional<std::unique_ptr<ast::ReturnStatement>>
+Parser::ParseReturnStatement() {}
 
 bool Parser::ExpectPeek(TokenType t) {
   if (peekToken.type == t) {

@@ -19,6 +19,7 @@ public:
   std::unique_ptr<ast::Statement> ParseStatement();
   std::optional<std::unique_ptr<ast::LetStatement>> ParseLetStatement();
   std::optional<std::unique_ptr<ast::ReturnStatement>> ParseReturnStatement();
+
   bool ExpectPeek(TokenType expectedToken);
   std::vector<std::exception> errors;
 

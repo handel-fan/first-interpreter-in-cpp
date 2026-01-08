@@ -4,6 +4,8 @@
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parse_exception.h"
 #include "../include/token/token.h"
+#include <sstream>
+#include <type_traits>
 
 namespace parser {
 Parser::Parser(lexer::Lexer lexer) : lexer(lexer) {
@@ -56,17 +58,6 @@ std::unique_ptr<ast::Statement> Parser::ParseStatement() {
         "Failed parsing, couldn't find out what statement type was.");
   }
   }
-  if (ExpectPeek(TokenType::LET))
-    // TODO: We have to "move" the letstatement as a statement. Idk what that
-    // means yet
-    if (auto letStatement = ParseLetStatement()) {
-      return std::move(*letStatement);
-    }
-
-    else
-      notimplementedpleaseignore();
-  // else if (currToken.type == TokenType::RETURN) return
-  // ParseReturnStatement(); else return parseExpressionStatement();
 }
 
 // In C++, you can declare a reference or pointer to an abstract class
@@ -91,9 +82,9 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
   }
 
   this->NextToken();
-  statement->value = this->ParseExpression();
+  // statement->value = this->ParseExpression();
 
-  return statement;
+  return nullptr;
 }
 
 std::optional<std::unique_ptr<ast::ReturnStatement>>
@@ -104,8 +95,18 @@ bool Parser::ExpectPeek(TokenType t) {
     NextToken();
     return true;
   } else {
-    errors.push_back(ParsingFailureException(std::format(
-        "Expected token type: {}, got {} instead", t, peekToken.type)));
+
+    // This is ai generated stuff I don't understand yet.
+    // Revisit this less important code later.
+    auto u = [](auto e) {
+      using E = decltype(e);
+      return static_cast<std::underlying_type_t<E>>(e);
+    };
+    std::ostringstream oss;
+    oss << "Expected token type: " << u(t) << ", got " << u(peekToken.type)
+        << " instead";
+
+    errors.push_back(ParsingFailureException(oss.str()));
     return false;
   }
 }

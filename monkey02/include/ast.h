@@ -52,8 +52,14 @@ struct LetStatement : Statement {
   std::string TokenLiteral() const override { return token.literal; }
 };
 
-struct ReturnStatement : Statement {};
+struct ReturnStatement : Statement {
+  ReturnStatement() {};
+  ReturnStatement(token::Token t) : token(t) {};
+  token::Token token;
+  Expression *returnValue;
 
+  std::string TokenLiteral() const override { return token.literal; }
+};
 } // namespace ast
 
 #endif // AST_H

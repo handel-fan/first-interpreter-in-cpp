@@ -27,13 +27,17 @@ ast::Program Parser::ParseProgram() {
 
   while (currToken.type != TokenType::END_OF_FILE) {
     auto stmt = ParseStatement();
+    if (!stmt) {
+      // NOTE: Maybe print whatever is in errors here.
+      throw ParsingFailureException("Failed to parse statement");
+    }
     NextToken();
   }
 
   return ast::Program();
 }
 
-std::unique_ptr<ast::Statement> Parser::ParseStatement() {
+std::optional<std::unique_ptr<ast::Statement>> Parser::ParseStatement() {
 
   switch (currToken.type) {
   case TokenType::LET: {
@@ -52,7 +56,7 @@ std::unique_ptr<ast::Statement> Parser::ParseStatement() {
       throw ParsingFailureException("Failed to parse return statement");
     }
   }
-    // Will eventually add stuff like expressions to this switch statement
+    // NOTE: Will eventually add stuff like expressions to this switch statement
   default: {
     throw ParsingFailureException(
         "Failed parsing, couldn't find out what statement type was.");
@@ -81,10 +85,12 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
     return std::nullopt;
   }
 
-  this->NextToken();
+  // Skip expressions for now
+  while (currToken.type != TokenType::SEMICOLON)
+    this->NextToken();
   // statement->value = this->ParseExpression();
 
-  return nullptr;
+  return statement;
 }
 
 std::optional<std::unique_ptr<ast::ReturnStatement>>

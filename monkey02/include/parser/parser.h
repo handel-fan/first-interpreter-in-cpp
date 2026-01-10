@@ -16,7 +16,7 @@ public:
 
   void NextToken();
   ast::Program ParseProgram();
-  std::unique_ptr<ast::Statement> ParseStatement();
+  std::optional<std::unique_ptr<ast::Statement>> ParseStatement();
   std::optional<std::unique_ptr<ast::LetStatement>> ParseLetStatement();
   std::optional<std::unique_ptr<ast::ReturnStatement>> ParseReturnStatement();
 

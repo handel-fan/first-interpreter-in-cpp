@@ -16,6 +16,7 @@ struct StatementTestCase {
 };
 
 // Definition of TestLetStatement
+// NOTE: We're skipping asserting the value for now.
 bool TestLetStatement(ast::Statement *s, std::string name) {
   ast::LetStatement *letStatement = dynamic_cast<ast::LetStatement *>(s);
   if (!letStatement) {
@@ -62,6 +63,8 @@ TEST(Parser, BasicParser) {
       FAIL() << "TestLetStatement failed for test case " << i;
     }
   }
+}
+
 }
 
 } // namespace parser

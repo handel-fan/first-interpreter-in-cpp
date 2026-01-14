@@ -1,6 +1,6 @@
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parser.h"
-#include "../lib/gtest/include/gtest.h"
+#include "<gtest/gtest.h>"
 #include <vector>
 using ExpectedIdentifier = std::string;
 

@@ -85,16 +85,27 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
     return std::nullopt;
   }
 
-  // Skip expressions for now
+  // TODO: Add expression parsing later.
   while (currToken.type != TokenType::SEMICOLON)
     this->NextToken();
-  // statement->value = this->ParseExpression();
 
   return statement;
 }
 
 std::optional<std::unique_ptr<ast::ReturnStatement>>
-Parser::ParseReturnStatement() {}
+Parser::ParseReturnStatement() {
+  if (!ExpectPeek(TokenType::RETURN)) {
+    return std::nullopt;
+  }
+  std::unique_ptr<ast::ReturnStatement> retStmt =
+      std::make_unique<ast::ReturnStatement>();
+
+  // TODO: Add expression parsing later.
+  while (currToken.type != TokenType::SEMICOLON) {
+    this->NextToken();
+  }
+  return retStmt;
+}
 
 bool Parser::ExpectPeek(TokenType t) {
   if (peekToken.type == t) {

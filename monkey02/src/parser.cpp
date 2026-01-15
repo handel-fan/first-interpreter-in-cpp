@@ -24,7 +24,8 @@ ast::Program Parser::ParseProgram() {
   // Well I guess so, but we should put the responsibility of correct
   // calling on the caller, not on Parser.
   ast::Program program{};
-  program.statements = std::vector<ast::Statement *>();
+  std::vector<ast::Statement *> initVec{};
+  program.statements = &initVec;
 
   while (currToken.type != TokenType::END_OF_FILE) {
     std::optional<ast::Statement *> stmt = ParseStatement();
@@ -33,7 +34,7 @@ ast::Program Parser::ParseProgram() {
       throw ParsingFailureException("Failed to parse statement");
     }
     ast::Statement *stmt_ptr = stmt.value();
-    program.statements.push_back(stmt_ptr);
+    program.statements->push_back(stmt_ptr);
     NextToken();
   }
 

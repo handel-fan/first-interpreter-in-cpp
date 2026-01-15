@@ -53,17 +53,17 @@ TEST(Parser, LetStatement) {
 
   parser::Parser p = parser::Parser(lexer::Lexer(letStmtInput));
   ast::Program program = p.ParseProgram();
-  if (program.statements.size() == 0) {
+  if (program.statements->size() == 0) {
     FAIL() << "ParseProgram had no statements";
   }
 
-  if (program.statements.size() != 3) {
-    FAIL() << "Expected 3 statements, got" << program.statements.size()
+  if (program.statements->size() != 3) {
+    FAIL() << "Expected 3 statements, got" << program.statements->size()
            << " statements";
   }
 
   for (int i = 0; i < letStmtTestCases.size(); i++) {
-    if (!TestLetStatement(program.statements[i],
+    if (!TestLetStatement(program.statements->at(i),
                           letStmtTestCases[i].ExpectedIdentifier)) {
       FAIL() << "TestLetStatement failed for test case " << i;
     }
@@ -94,13 +94,13 @@ std::vector<parser::RetStmtTest> retStmtTestCases = {
 TEST(Parser, ReturnStatement) {
   parser::Parser p{lexer::Lexer(retStmtInput)};
   ast::Program program = p.ParseProgram();
-  if (program.statements.size() != 3) {
-    FAIL() << "Expected 1 statements, got" << program.statements.size()
+  if (program.statements->size() != 3) {
+    FAIL() << "Expected 1 statements, got" << program.statements->size()
            << " statements";
   }
-  for (int iter = 0; iter < 3; iter++) {
-    if (!TestReturnStatement(program.statements[iter])) {
-      FAIL() << "TestReturnStatement failed for test case " << iter;
+  for (int i = 0; i < 3; i++) {
+    if (!TestReturnStatement(program.statements->at(i))) {
+      FAIL() << "TestReturnStatement failed for test case " << i;
     }
   }
 }

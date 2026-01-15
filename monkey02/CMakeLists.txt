@@ -1,4 +1,4 @@
-cmake_minimum_version(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16)
 
 project(monkey02 LANGUAGES CXX)
 
@@ -10,6 +10,7 @@ include_directories(include)
 set(SRC_FILES
     src/lexer.cpp
     src/parser.cpp
+    src/token.cpp
 )
 
 add_executable(parser_test
@@ -17,5 +18,15 @@ add_executable(parser_test
     ${SRC_FILES}
 )
 
-# TODO: We need to appropriately link stuff here, look at other CMakeLists.txt
-target_link_libraries(parser_test lib/gtest/include/gtest.h)
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        v1.17.0
+)
+
+FetchContent_MakeAvailable(googletest)
+
+target_link_libraries(parser_test gtest gtest_main)
+

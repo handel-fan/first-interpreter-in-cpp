@@ -4,6 +4,7 @@
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parse_exception.h"
 #include "../include/token/token.h"
+#include <iostream>
 #include <sstream>
 #include <type_traits>
 
@@ -45,6 +46,8 @@ std::optional<std::unique_ptr<ast::Statement>> Parser::ParseStatement() {
     if (stmt) {
       return std::move(*stmt);
     } else {
+      std::cout << "Failed on the following token :" + currToken.literal
+                << std::endl;
       throw ParsingFailureException("Failed to parse let statement");
     }
   }
@@ -74,14 +77,15 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
       std::make_unique<ast::LetStatement>();
 
   if (!ExpectPeek(TokenType::IDENT)) {
+    std::cout << "IDENT EXPECT PEEK FAILURE" << std::endl;
     return std::nullopt;
   }
-
-  this->NextToken();
 
   statement->name = ast::Identifier{currToken, currToken.literal};
 
   if (!ExpectPeek(TokenType::ASSIGN)) {
+    std::cout << "ASSIGN EXPECT PEEK FAILURE" << std::endl;
+    std::cout << "Got this instead " + peekToken.literal << std::endl;
     return std::nullopt;
   }
 

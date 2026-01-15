@@ -16,9 +16,9 @@ public:
 
   void NextToken();
   ast::Program ParseProgram();
-  std::optional<std::unique_ptr<ast::Statement>> ParseStatement();
-  std::optional<std::unique_ptr<ast::LetStatement>> ParseLetStatement();
-  std::optional<std::unique_ptr<ast::ReturnStatement>> ParseReturnStatement();
+  std::optional<ast::Statement *> ParseStatement();
+  std::optional<ast::LetStatement *> ParseLetStatement();
+  std::optional<ast::ReturnStatement *> ParseReturnStatement();
 
   bool ExpectPeek(TokenType expectedToken);
   std::vector<std::exception> errors;

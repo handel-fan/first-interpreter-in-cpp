@@ -63,7 +63,7 @@ TEST(Parser, LetStatement) {
   }
 
   for (int i = 0; i < letStmtTestCases.size(); i++) {
-    if (!TestLetStatement(&program.statements[i],
+    if (!TestLetStatement(program.statements[i],
                           letStmtTestCases[i].ExpectedIdentifier)) {
       FAIL() << "TestLetStatement failed for test case " << i;
     }
@@ -99,7 +99,7 @@ TEST(Parser, ReturnStatement) {
            << " statements";
   }
   for (int iter = 0; iter < 3; iter++) {
-    if (!TestReturnStatement(&program.statements[iter])) {
+    if (!TestReturnStatement(program.statements[iter])) {
       FAIL() << "TestReturnStatement failed for test case " << iter;
     }
   }

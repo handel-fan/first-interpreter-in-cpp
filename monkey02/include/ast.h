@@ -22,10 +22,10 @@ struct Statement : Node {
 struct Expression : Node {};
 
 struct Program : ast::Node {
-  std::vector<ast::Statement> statements;
+  std::vector<ast::Statement *> statements;
   std::string TokenLiteral() const override {
     if (statements.size() > 0) {
-      return this->statements[0].TokenLiteral();
+      return this->statements[0]->TokenLiteral();
     } else {
       return "";
     }

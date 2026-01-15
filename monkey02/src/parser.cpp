@@ -24,27 +24,29 @@ ast::Program Parser::ParseProgram() {
   // Well I guess so, but we should put the responsibility of correct
   // calling on the caller, not on Parser.
   ast::Program program{};
-  program.statements = std::vector<ast::Statement>();
+  program.statements = std::vector<ast::Statement *>();
 
   while (currToken.type != TokenType::END_OF_FILE) {
-    auto stmt = ParseStatement();
+    std::optional<ast::Statement *> stmt = ParseStatement();
     if (!stmt) {
       // NOTE: Maybe print whatever is in errors here.
       throw ParsingFailureException("Failed to parse statement");
     }
+    ast::Statement *stmt_ptr = stmt.value();
+    program.statements.push_back(stmt_ptr);
     NextToken();
   }
 
   return ast::Program();
 }
 
-std::optional<std::unique_ptr<ast::Statement>> Parser::ParseStatement() {
+std::optional<ast::Statement *> Parser::ParseStatement() {
 
   switch (currToken.type) {
   case TokenType::LET: {
     auto stmt = ParseLetStatement();
     if (stmt) {
-      return std::move(*stmt);
+      return stmt;
     } else {
       std::cout << "Failed on the following token :" + currToken.literal
                 << std::endl;
@@ -72,16 +74,16 @@ std::optional<std::unique_ptr<ast::Statement>> Parser::ParseStatement() {
 // ast::Statement Furthermore, a pointer can point to different memory
 // addresses in its lifetime. A reference can only point to 1 lvalue, and it
 // must be initialized.
-std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
-  std::unique_ptr<ast::LetStatement> statement =
-      std::make_unique<ast::LetStatement>();
+std::optional<ast::LetStatement *> Parser::ParseLetStatement() {
+  ast::LetStatement initLetStmt{};
+  ast::LetStatement *letStmt = &initLetStmt;
 
   if (!ExpectPeek(TokenType::IDENT)) {
     std::cout << "IDENT EXPECT PEEK FAILURE" << std::endl;
     return std::nullopt;
   }
 
-  statement->name = ast::Identifier{currToken, currToken.literal};
+  letStmt->name = ast::Identifier{currToken, currToken.literal};
 
   if (!ExpectPeek(TokenType::ASSIGN)) {
     std::cout << "ASSIGN EXPECT PEEK FAILURE" << std::endl;
@@ -93,16 +95,15 @@ std::optional<std::unique_ptr<ast::LetStatement>> Parser::ParseLetStatement() {
   while (currToken.type != TokenType::SEMICOLON)
     this->NextToken();
 
-  return statement;
+  return letStmt;
 }
 
-std::optional<std::unique_ptr<ast::ReturnStatement>>
-Parser::ParseReturnStatement() {
+std::optional<ast::ReturnStatement *> Parser::ParseReturnStatement() {
   if (!ExpectPeek(TokenType::RETURN)) {
     return std::nullopt;
   }
-  std::unique_ptr<ast::ReturnStatement> retStmt =
-      std::make_unique<ast::ReturnStatement>();
+  ast::ReturnStatement initRetStmt{};
+  ast::ReturnStatement *retStmt = &initRetStmt;
 
   // TODO: Add expression parsing later.
   while (currToken.type != TokenType::SEMICOLON) {

@@ -15,7 +15,7 @@ public:
   Parser(lexer::Lexer lexer);
 
   void NextToken();
-  ast::Program ParseProgram();
+  std::unique_ptr<ast::Program> ParseProgram();
   std::optional<ast::Statement *> ParseStatement();
   std::optional<ast::LetStatement *> ParseLetStatement();
   std::optional<ast::ReturnStatement *> ParseReturnStatement();

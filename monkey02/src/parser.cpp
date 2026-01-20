@@ -19,7 +19,7 @@ void Parser::NextToken() {
   peekToken = lexer.NextToken();
 }
 
-ast::Program Parser::ParseProgram() {
+std::unique_ptr<ast::Program> Parser::ParseProgram() {
   // NOTE: Does this expect Parser to be on a particular token? (First?)
   // Well I guess so, but we should put the responsibility of correct
   // calling on the caller, not on Parser.
@@ -38,7 +38,7 @@ ast::Program Parser::ParseProgram() {
     NextToken();
   }
 
-  return ast::Program();
+  return std::make_unique<ast::Program>(std::move(program));
 }
 
 std::optional<ast::Statement *> Parser::ParseStatement() {

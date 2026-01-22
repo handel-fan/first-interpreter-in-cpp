@@ -15,13 +15,17 @@ struct Node {
 struct Statement : Node {
   std::vector<token::Token> lvalue_list;
 
-  // FIXME: This should not return let
+  // NOTE: Will return let for now
   std::string TokenLiteral() const override { return "let"; }
 };
 
 struct Expression : Node {};
 
 struct Program : ast::Node {
+  Program() {};
+  Program(Program &&other) noexcept : statements(other.statements) {
+    other.statements = nullptr;
+  };
   std::vector<ast::Statement *> *statements;
   std::string TokenLiteral() const override {
     if (statements->size() > 0) {

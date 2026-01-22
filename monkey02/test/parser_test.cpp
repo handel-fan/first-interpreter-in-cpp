@@ -1,6 +1,7 @@
 #include "../include/lexer/lexer.h"
 #include "../include/parser/parser.h"
 #include <gtest/gtest.h>
+#include <typeinfo>
 #include <vector>
 using ExpectedIdentifier = std::string;
 
@@ -21,9 +22,9 @@ struct RetStmtTest {
   RetStmtTest(const std::string &str) : ExpectedIdentifier(str) {};
 };
 
-std::string letStmtInput = "let x = 5;\n"
-                           "let y = 10;\n"
-                           "let foobar = 838383;\n";
+std::string letStmtCode = "let x = 5;\n"
+                          "let y = 10;\n"
+                          "let foobar = 838383;\n";
 std::vector<parser::LetStmtTest> letStmtTestCases = {
     LetStmtTest{"x"},
     LetStmtTest{"y"},
@@ -51,14 +52,21 @@ bool TestLetStatement(ast::Statement *s, std::string name) {
 
 TEST(Parser, LetStatement) {
 
-  parser::Parser p = parser::Parser(lexer::Lexer(letStmtInput));
+  parser::Parser p = parser::Parser(lexer::Lexer(letStmtCode));
   std::unique_ptr<ast::Program> program = std::move(p.ParseProgram());
   if (program->statements->size() == 0) {
     FAIL() << "ParseProgram had no statements";
   }
 
+  for (ast::Statement *s : *(program->statements)) {
+    std::cout << "printing out statements" << std::endl;
+    std::cout << "type of statement: " << typeid(*s).name();
+    ast::LetStatement *ltstmt = dynamic_cast<ast::LetStatement *>(s);
+    std::cout << "letstatement value: " << std::endl;
+    std::cout << ltstmt->name.value << std::endl;
+  }
   if (program->statements->size() != 3) {
-    FAIL() << "Expected 3 statements, got" << program->statements->size()
+    FAIL() << "Expected 3 statements, got " << program->statements->size()
            << " statements";
   }
 

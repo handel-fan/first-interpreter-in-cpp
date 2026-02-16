@@ -5,3 +5,77 @@ lib/
 monkey02/waiig_code_1.3/
 monkey02/waiig_code_1.3.zip
 *.go
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+*.so.*
+
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+Build/
+build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+install_manifest.txt 
+compile_commands.json
+
+# Temporary files
+*.tmp 
+*.log 
+*.bak 
+*.swp 
+
+# vcpkg
+vcpkg_installed/
+
+# debug information files
+*.dwo
+
+# test output & cache
+Testing/
+.cache/99;9u
+01/src/monkey/lexer/foo_ascii.cpp
+01/src/monkey/token/foo_main.cpp
+01/src/monkey/lexer/build_lexer_test.fish
+go_code
